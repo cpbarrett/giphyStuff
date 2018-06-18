@@ -1,23 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <title>Fun with Giphy</title>
-</head>
-
-<body>
-  <div id="topics"></div>
-  <div>
-    <form id="search">
-      <label form="input">Add Something</label>
-      <input type="text" name="input"><br>
-      <input type="submit" value="submit" id="input">
-    </form></div>
-  <div id="images">
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript">
     //Array of topics
     let topics = [
       'cats',
@@ -25,23 +6,30 @@
       'birds',
       'dice'];
 
+$(document).ready(function(){
+
       for (var i = 0; i < topics.length; i++) {
         var buttons = $("<button>" + topics[i] + "</button>");
         buttons.appendTo("#topics");
         buttons.attr('id', topics[i]);
       }
 
-      $("#input").on("click", function(){
+      $("#input").on("click", function(event){
+        event.preventDefault();
+        
         let input = $("#search").val();
         topics.push(input);
         console.log(topics);
-        $("<button>" + topics[topics.length - 1] + "</button>");
+
+        let newButton = $("<button>" + topics[topics.length - 1] + "</button>");
+        newButton.appendTo("#topics");
+        newButton.attr('id', topics[topics.length - 1]);
 
       });
 
-    // Event listener for our cat-button
-    $("button").on("click", function() { 
-      console.log($(this));  
+    // Event listener for our topic-buttons
+    $("button").click(function() { 
+      console.log($(this).attr("id"));  
 
       // Storing our giphy API URL for a random cat image
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + $(this).attr("id") + "&api_key=s3fyAuzwI6ayhreBgJCwuPg9LtypOkPe&limit=10"; 
@@ -105,7 +93,5 @@
         $(this).attr("data-state", "still");
       }
     });
-  </script>
-</body>
 
-</html>
+});
