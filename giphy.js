@@ -1,37 +1,48 @@
-
     //Array of topics
-    let topics = [
-      'cats',
-      'dogs',
-      'birds',
-      'dice'];
+let topics = [
+  'cats',
+  'dogs',
+  'birds',
+  'dice'
+  ];
 
 $(document).ready(function(){
 
-      for (var i = 0; i < topics.length; i++) {
-        var buttons = $("<button>" + topics[i] + "</button>");
+  populateButtons();
+
+
+
+  
+//creates buttons with id topics
+  function populateButtons() {
+
+    $("#topics").empty();
+
+    for (var i = 0; i < topics.length; i++) {
+        let buttons = $("<button>" + topics[i] + "</button>");
         buttons.appendTo("#topics");
         buttons.attr('id', topics[i]);
-      }
+        }
+  }
 
-      $("#input").on("click", function(event){
+//listener for new button topic input
+  $("#input").on("click", function(event){
         event.preventDefault();
         
         let input = $("#search").val();
         topics.push(input);
         console.log(topics);
 
-        let newButton = $("<button>" + topics[topics.length - 1] + "</button>");
-        newButton.appendTo("#topics");
-        newButton.attr('id', topics[topics.length - 1]);
+        populateButtons();
+  });
 
-      });
+    // Event listener for our topic-buttons, must be written as on('click') in order for dynamically created buttons to activate
+    $(document).on('click', 'button', function() { 
+      console.log($(this).attr("id"));
 
-    // Event listener for our topic-buttons
-    $("button").click(function() { 
-      console.log($(this).attr("id"));  
+      $("#images").empty();  
 
-      // Storing our giphy API URL for a random cat image
+      // Storing our giphy API URL for a random image
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + $(this).attr("id") + "&api_key=s3fyAuzwI6ayhreBgJCwuPg9LtypOkPe&limit=10"; 
       
       // Perfoming an AJAX GET request to our queryURL
@@ -72,13 +83,14 @@ $(document).ready(function(){
         // Prepending the topicImage and rating to the images div
         $("#images").prepend(p);
         $("#images").prepend(topicImage);
-        //$("#images").clearQueue();
+        $("#images").clearQueue();
         }
 
       });
     });
-    //Listeners for the gif pausing
-    $(".gif").on("click", function() {
+
+    //Listeners for the gif pausing and unpausing
+    $(document).on('click', '.gif', function() {
       // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
       var state = $(this).attr("data-state");
       console.log(this);
